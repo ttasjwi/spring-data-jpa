@@ -12,3 +12,21 @@
   - JPA 예외를 스프링 예외로 변환하는 과정도 자동으로 처리
 
 ---
+
+## 메서드 이름으로 쿼리 생성
+```java
+public interface MemberRepository extends JpaRepository<Member, Long> {
+
+    List<Member> findByNameAndAgeGreaterThan(String name, int age);
+
+}
+```
+컴파일 시 오류 발생 체크 가능
+- 조회 : find...By, read...By, get...By
+  - findHelloBy와 같이 식별하기 위한 내용, 설명이 들어가기도 함.
+- 갯수 : count...By
+- exists : exists...By (boolean)
+- 삭제 : delete...By, remove...By
+- distinct : 중복 제거
+- limit : findLimit3, findTop, findTop3, ...
+
