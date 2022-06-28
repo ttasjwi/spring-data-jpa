@@ -30,3 +30,38 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 - distinct : 중복 제거
 - limit : findLimit3, findTop, findTop3, ...
 
+---
+
+## NamedQuery
+```java
+@NamedQuery(
+        name = "Member.findByName",
+        query = "SELECT m FROM Member as m WHERE m.name = :name"
+)
+
+public class Member {
+```
+- NamedQuery의 강점 : 애플리케이션 로딩 시점에 파싱을 하기 때문에 컴파일 에러 감지가 가능
+
+```java
+public interface MemberRepository extends JpaRepository<Member, Long> {
+
+    //생략
+  
+    @Query(name = "Member.findByName")
+    List<Member> findByName(@Param("name") String name);
+}
+```
+- 리포지토리에서 NamedQuery를 호출하여 사용 가능
+```java
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    
+    // @Query(name = "Member.findByName")
+    List<Member> findByName(@Param("name") String name);
+}
+```
+- 사실 `@Query`를 생략해도 작동이 됨
+  - 타입, 메서드명을 기반으로 NamedQuery를 조회 (우선순위 높다)
+  - 없으면 메서드명을 기반으로 Query 생성
+
+---

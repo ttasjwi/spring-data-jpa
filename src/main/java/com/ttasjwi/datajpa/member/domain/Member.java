@@ -11,6 +11,11 @@ import static javax.persistence.FetchType.LAZY;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "name", "age"})
+@NamedQuery(
+        name = "Member.findByName",
+        query = "SELECT m FROM Member as m WHERE m.name = :name"
+)
+
 public class Member {
 
     @Id

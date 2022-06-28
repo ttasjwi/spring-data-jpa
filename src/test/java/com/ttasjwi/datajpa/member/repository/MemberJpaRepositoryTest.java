@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -74,6 +75,23 @@ class MemberJpaRepositoryTest {
         assertThat(result.get(0).getAge()).isEqualTo(20);
         assertThat(result.size()).isEqualTo(1);
 
+    }
+
+    @Test
+    public void testNamedQuery() {
+        //given
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberJpaRepository.save(m1);
+        memberJpaRepository.save(m2);
+
+        //when
+        List<Member> result = memberJpaRepository.findByName("AAA");
+
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getName()).isEqualTo("AAA");
+        assertThat(result.get(0).getAge()).isEqualTo(10);
     }
 
 }
