@@ -65,3 +65,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   - 없으면 메서드명을 기반으로 Query 생성
 
 ---
+
+### `@Query` : 리포지토리 메소드에 쿼리 정의하기
+```java
+    @Query("SELECT m FROM Member as m Where m.name = :name and m.age = :age")
+    List<Member> findMember(@Param("name") String name, @Param("age") int age);
+```
+- 쿼리를 직접 레포지토리 인터페이스 메서드의 선언부에 작성
+- 애플리케이션 로딩 시점에 문법 오류, 이상한 변수 선언이 있을 경우 감지하여 예외 발생
+
+---

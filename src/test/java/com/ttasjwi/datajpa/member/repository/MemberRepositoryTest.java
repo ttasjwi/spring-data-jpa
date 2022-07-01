@@ -1,6 +1,8 @@
 package com.ttasjwi.datajpa.member.repository;
 
 import com.ttasjwi.datajpa.member.domain.Member;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -88,5 +90,22 @@ class MemberRepositoryTest {
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.get(0).getName()).isEqualTo("AAA");
         assertThat(result.get(0).getAge()).isEqualTo(10);
+    }
+
+    @Test
+    public void testQuery() {
+        //given
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        //when
+        List<Member> result = memberRepository.findMember("AAA", 10);
+
+
+        //then
+        assertThat(result.get(0)).isEqualTo(m1);
     }
 }
