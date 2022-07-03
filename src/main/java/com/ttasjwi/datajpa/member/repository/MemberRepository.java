@@ -1,6 +1,7 @@
 package com.ttasjwi.datajpa.member.repository;
 
 import com.ttasjwi.datajpa.member.domain.Member;
+import com.ttasjwi.datajpa.member.dto.MemberDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +26,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member as m Where m.name = :name and m.age = :age")
     List<Member> findMember(@Param("name") String name, @Param("age") int age);
 
+    @Query("SELECT m.name FROM Member as m")
+    List<String> findMemberNameList();
+
+    @Query("SELECT new com.ttasjwi.datajpa.member.dto.MemberDto(m.id, m.name, t.name) " +
+            "FROM Member as m " +
+            "JOIN m.team as t")
+    List<MemberDto> findMemberDto();
 }

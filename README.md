@@ -75,3 +75,24 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 - 애플리케이션 로딩 시점에 문법 오류, 이상한 변수 선언이 있을 경우 감지하여 예외 발생
 
 ---
+
+### `@Query` : 값/값타입, DTO 조회
+```java
+    @Query("SELECT m.name FROM Member as m")
+    List<String> findMemberNameList();
+
+    @Query("SELECT new com.ttasjwi.datajpa.member.dto.MemberDto(m.id, m.name, t.name) " +
+            "FROM Member as m " +
+            "JOIN m.team as t")
+    List<MemberDto> findMemberDto();
+```
+- 엔티티 뿐 아니라, 단순 값 조회 가능
+  - 값타입 조회도 가능하다.
+- Dto로 조회 가능
+  - new 명령어 사용해야함.
+  - 실제 DTO의 FQCN을 알아야함(도중에 경로가 바뀌면 다시 수정해야함)
+  - 딱 맞는 순서의 DTO 생성자가 있어야함.
+  - IDE의 도움을 받기 매우 힘들다...
+  - 불편함이 많긴한데 이 부분은 Querydsl을 사용하면 편리해진다.
+
+---

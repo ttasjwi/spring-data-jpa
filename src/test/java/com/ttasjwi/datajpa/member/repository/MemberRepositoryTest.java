@@ -1,7 +1,10 @@
 package com.ttasjwi.datajpa.member.repository;
 
 import com.ttasjwi.datajpa.member.domain.Member;
-import org.assertj.core.api.Assertions;
+import com.ttasjwi.datajpa.member.dto.MemberDto;
+import com.ttasjwi.datajpa.team.domain.Team;
+import com.ttasjwi.datajpa.team.repository.TeamRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +15,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 @SpringBootTest
 @Transactional
 class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Test
     public void testMember() {
@@ -107,5 +114,40 @@ class MemberRepositoryTest {
 
         //then
         assertThat(result.get(0)).isEqualTo(m1);
+    }
+
+    @Test
+    public void findMemberNameList() throws Exception {
+        //given
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        //then
+        List<String> memberNames = memberRepository.findMemberNameList();
+
+        for (String memberName : memberNames) {
+            log.info("memberName = {}", memberName);
+        }
+        assertThat(memberNames.size()).isEqualTo(2);
+        assertThat(memberNames).containsExactly("AAA", "BBB");
+    }
+
+    @Test
+    public void findMemberDto() throws Exception {
+        Team team = new Team("teamA");
+        teamRepository.save(team);
+
+        Member m1 = new Member("AAA", 10);
+        m1.setTeam(team);
+        memberRepository.save(m1);
+
+        List<MemberDto> memberDtos = memberRepository.findMemberDto();
+
+        for (MemberDto memberDto : memberDtos) {
+            log.info("memberDto = {}", memberDto);
+        }
     }
 }
