@@ -1,6 +1,7 @@
 package com.ttasjwi.datajpa.member.repository;
 
 import com.ttasjwi.datajpa.member.domain.Member;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,6 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 @SpringBootTest
 @Transactional
 class MemberJpaRepositoryTest {
@@ -92,6 +94,35 @@ class MemberJpaRepositoryTest {
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.get(0).getName()).isEqualTo("AAA");
         assertThat(result.get(0).getAge()).isEqualTo(10);
+    }
+
+    @Test
+    public void paging() {
+        // given
+        memberJpaRepository.save(new Member("member1", 10));
+        memberJpaRepository.save(new Member("member2", 10));
+        memberJpaRepository.save(new Member("member3", 10));
+        memberJpaRepository.save(new Member("member4", 10));
+        memberJpaRepository.save(new Member("member5", 10));
+
+        int age = 10;
+        int offset = 0;
+        int limit = 3;
+
+        // when
+        List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
+        long totalCount = memberJpaRepository.totalCountByAge(age);
+
+        // 이 방식을 사용하려면 페이징을 할 때마다 페이지 계산 공식 적용해서 머리를 매번 굴릴 필요가 있다.
+        // totalPage = totalCount / size ...
+        // 마지막 페이지 ...
+        // 최초 페이지 ..
+
+        log.info("members = {}", members);
+
+        // then
+        assertThat(members.size()).isEqualTo(3);
+        assertThat(totalCount).isEqualTo(5);
     }
 
 }

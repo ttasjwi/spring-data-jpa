@@ -56,4 +56,33 @@ public class MemberJpaRepository {
                 .setParameter("name", name)
                 .getResultList();
     }
+
+    /**
+     * 1. 검색 : 나이로 검색
+     * 2. 정렬 : 이름으로 내림차순
+     * 3. 페이징 : offset부터 시작해서 limit만큼 잘라서
+     */
+    public List<Member> findByPage(int age, int offset, int limit) {
+        return em.createQuery(
+                        "SELECT m " +
+                                "FROM Member as m " +
+                                "WHERE m.age = :age " +
+                                "ORDER BY m.name desc", Member.class)
+                .setParameter("age", age)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    /**
+     * 해당 나이의 총 회원 수
+     */
+    public long totalCountByAge(int age) {
+        return em.createQuery(
+                "SELECT count(m) " +
+                        "FROM Member as m " +
+                        "WHERE m.age = :age", Long.class)
+                .setParameter("age", age)
+                .getSingleResult();
+    }
 }
