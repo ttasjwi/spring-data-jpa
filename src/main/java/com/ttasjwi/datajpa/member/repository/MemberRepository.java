@@ -2,6 +2,9 @@ package com.ttasjwi.datajpa.member.repository;
 
 import com.ttasjwi.datajpa.member.domain.Member;
 import com.ttasjwi.datajpa.member.dto.MemberDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,4 +49,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findOptionalByName(String name);
     Member findMemberByName(String name);
     List<Member> findListByName(String name);
+
+    /**
+     * Spring Data JPA 제공 페이징 기능
+     */
+    @Query(value = "SELECT m FROM Member as m WHERE m.age = :age",
+            countQuery = "SELECT count(m.name) FROM Member as m WHERE m.age = :age"
+    )
+    Page<Member> findByAge(int age, Pageable pageable);
+    Slice<Member> findSliceByAge(int age, Pageable pageable);
+    List<Member> findListByAge(int age, Pageable pageable);
 }
