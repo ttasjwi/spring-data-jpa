@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -33,4 +34,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "FROM Member as m " +
             "JOIN m.team as t")
     List<MemberDto> findMemberDto();
+
+    /**
+     * 컬렉션 파라미터 바인딩 -> 이름 목록으로 회원 조회
+     */
+    @Query("SELECT m FROM Member as m WHERE m.name in :names")
+    List<Member> findByNames(@Param("names") Collection<String> names);
 }

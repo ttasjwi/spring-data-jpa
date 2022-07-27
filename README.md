@@ -96,3 +96,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   - 불편함이 많긴한데 이 부분은 Querydsl을 사용하면 편리해진다.
 
 ---
+
+## 파라미터 바인딩
+- 위치 기반 : 순서가 바뀔 때 위험해짐.
+- 이름 기반 : 코드 가독성, 유지보수면에서 이름 기반 쿼리가 낫다.
+  - 컬렉션 파라미터 바인딩도 가능하다 (in절...)
+
+---

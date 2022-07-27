@@ -150,4 +150,20 @@ class MemberRepositoryTest {
             log.info("memberDto = {}", memberDto);
         }
     }
+
+    @Test
+    public void findByNames() {
+        //given
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        //then
+        List<Member> result = memberRepository.findByNames(List.of("AAA", "BBB"));
+        for (Member member : result) {
+            log.info("member = {}", member);
+        }
+    }
 }
