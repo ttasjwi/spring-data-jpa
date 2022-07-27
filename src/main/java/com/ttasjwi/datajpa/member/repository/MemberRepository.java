@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
@@ -40,4 +41,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
      */
     @Query("SELECT m FROM Member as m WHERE m.name in :names")
     List<Member> findByNames(@Param("names") Collection<String> names);
+
+
+    Optional<Member> findOptionalByName(String name);
+    Member findMemberByName(String name);
+    List<Member> findListByName(String name);
 }

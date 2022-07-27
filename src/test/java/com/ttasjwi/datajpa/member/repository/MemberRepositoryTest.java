@@ -5,7 +5,6 @@ import com.ttasjwi.datajpa.member.dto.MemberDto;
 import com.ttasjwi.datajpa.team.domain.Team;
 import com.ttasjwi.datajpa.team.repository.TeamRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -165,5 +164,34 @@ class MemberRepositoryTest {
         for (Member member : result) {
             log.info("member = {}", member);
         }
+    }
+
+    /**
+     * 다양한 반환타입을 지원한다.
+     */
+    @Test
+    public void returnTypes() {
+        //given
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> result1 = memberRepository.findListByName("AAA");
+        log.info("result1 = {}", result1); // "AAA"
+        assertThat(result1).extracting("name").containsExactly("AAA");
+        
+        List<Member> result2 = memberRepository.findListByName("DDD");
+        log.info("result2 = {}", result2); // 빈 컬렉션
+        assertThat(result2).isEmpty();
+
+        Member result3 = memberRepository.findOptionalByName("BBB").get();
+        log.info("result3 = {}", result3); // "BBB"
+        assertThat(result3.getName()).isEqualTo("BBB");
+
+        Member result4 = memberRepository.findMemberByName("DDD");
+        log.info("result3 = {}", result4); // null 반환!
+        assertThat(result4).isNull();
     }
 }
