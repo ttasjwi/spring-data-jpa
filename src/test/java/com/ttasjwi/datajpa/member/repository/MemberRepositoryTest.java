@@ -301,4 +301,23 @@ class MemberRepositoryTest {
 //        assertThat(page.hasPrevious()).isFalse();
 //        assertThat(page.isLast()).isFalse();
     }
+
+    @Test
+    public void bulkUpdate() throws Exception {
+        //given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+        //em.clear();
+        Member member5 = memberRepository.findByName("member5").stream().findFirst().get();
+        log.info("member 5 = {}", member5); // 41살
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
+    }
 }
